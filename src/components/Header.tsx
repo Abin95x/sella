@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { RollText } from "./ui/RollText";
 import { usePrefs } from "./providers/Prefs";
 import { getLenis } from "./providers/SmoothScroll";
-import { useCartCount } from "@/lib/cart";
 
 const links = [
   { label: "Studio", href: "#studio" },
@@ -41,7 +40,6 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const { theme, setTheme, reducedMotion, setReducedMotion } = usePrefs();
-  const cartCount = useCartCount();
   const panelRef = useRef<HTMLDivElement>(null);
   const savingLevel = (theme === "dark" ? 1 : 0) + (reducedMotion ? 1 : 0);
   const usage = ["High", "Med", "Low"][savingLevel];
@@ -96,12 +94,6 @@ export function Header() {
 
       <div ref={panelRef} className="pointer-events-auto relative">
         <div className="flex items-center gap-2">
-          <span
-            className="grid h-9 min-w-9 place-items-center rounded-full bg-card px-3 text-sm font-medium shadow-sm tabular-nums"
-            aria-label={`${cartCount} items in bag`}
-          >
-            Bag {cartCount}
-          </span>
           <button
             type="button"
             aria-expanded={open}

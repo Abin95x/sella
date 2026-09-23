@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
 import { createPortal } from "react-dom";
 import { products, type Product } from "@/lib/content";
 import { colorStore, useSwatchIndex } from "@/lib/colorStore";
-import { cart } from "@/lib/cart";
 import { gsap, useGSAP, isReduced } from "@/lib/gsap";
 import { ProductView } from "@/components/three/lazy";
 import { RollText } from "@/components/ui/RollText";
@@ -98,15 +97,8 @@ function ProductPanel({ product, index }: { product: Product; index: number }) {
   const active = useSwatchIndex(product.id);
   const swatch = product.swatches[active];
   const [open, setOpen] = useState(false);
-  const [added, setAdded] = useState(false);
   const mounted = useSyncExternalStore(noop, () => true, () => false);
   const close = useCallback(() => setOpen(false), []);
-
-  const add = () => {
-    cart.add();
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1600);
-  };
 
   return (
     <li
@@ -115,15 +107,6 @@ function ProductPanel({ product, index }: { product: Product; index: number }) {
     >
       <div className="flex items-start justify-between p-(--gutter) text-[#2e2d2b]">
         <span className="text-sm tabular-nums">0{index + 1}</span>
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="group grid size-10 place-items-center rounded-full bg-white shadow-sm transition-transform duration-500 ease-(--ease-out) hover:rotate-90"
-          aria-label={`Open ${product.name} details`}
-          aria-haspopup="dialog"
-        >
-          <span className="text-2xl leading-none font-light">+</span>
-        </button>
       </div>
 
       <ProductView id={product.id} className="relative min-h-0 flex-1" />
@@ -152,14 +135,6 @@ function ProductPanel({ product, index }: { product: Product; index: number }) {
         <div className="flex gap-2">
           <button type="button" onClick={() => setOpen(true)} className="roll-host rounded-full bg-white px-5 py-3 text-sm font-medium">
             <RollText text="Details" />
-          </button>
-          <button
-            type="button"
-            onClick={add}
-            className="roll-host min-w-[8.5rem] rounded-full bg-[#2e2d2b] px-5 py-3 text-sm font-medium text-white"
-            aria-live="polite"
-          >
-            <RollText text={added ? "Added ✓" : "Add to bag"} />
           </button>
         </div>
       </div>
