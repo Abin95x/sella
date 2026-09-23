@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sella — 3D furniture studio concept
 
-## Getting Started
+A concept site inspired by the layout and motion language of noho.ink, with an original brand, copy and
+procedurally-generated 3D chairs (no external models or photos).
 
-First, run the development server:
+## Stack
+Next.js 16 (App Router, TS) · Tailwind v4 · three.js + @react-three/fiber + drei · GSAP (ScrollTrigger, SplitText) · Lenis
 
+## Run
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build && npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
+- `src/components/three/geometry.ts` — procedural Arc / Flow chair geometry, perforation alpha map, blob shadow
+- `src/components/three/Scene.tsx` — the single shared WebGL canvas (drei `View.Port`)
+- `src/components/three/Stage.tsx` — hero stage (intro assembly, scroll spin, parallax) and product stage (drag to orbit)
+- `src/components/three/spin.ts` — drag-to-orbit in every direction with inertia; registers views for sleep tracking
+- `src/components/sections/*` — page sections; `src/lib/content.ts` — all copy and data
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Performance notes
+- One WebGL context for all 3D views; the canvas sleeps entirely when no chair is near the viewport.
+- WebGL renders from GSAP's ticker right after Lenis, so 3D never lags its DOM panel by a frame.
+- Adaptive resolution (drei PerformanceMonitor) drops DPR on slow GPUs.
+- three.js loads in a separate chunk, only after the browser is idle, so text paints first.
+- Geometry built once and shared; lighting uses procedural Lightformers (no HDR download).
+- Product contact shadows are baked once (the camera orbits, the chair stays put); the hero uses a blob shadow only.
+- "Reduce motion" / dark-mode toggles in the menu; honours `prefers-reduced-motion`.

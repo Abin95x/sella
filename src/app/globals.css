@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
+/* ---------- Design tokens ---------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f1eee9;
+  --bg-2: #e7e3dc;
+  --bg-3: #d9cfc2;
+  --tan: #cdbfae;
+  --fg: #2e2d2b;
+  --fg-muted: #6b6760;
+  --line: rgb(46 45 43 / 0.14);
+  --card: #ffffff;
+  --accent: #f2d33b;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --gutter: clamp(16px, 2.1vw, 30px);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #161514;
+  --bg-2: #1f1e1c;
+  --bg-3: #2a2825;
+  --tan: #3a342d;
+  --fg: #ece8e1;
+  --fg-muted: #a39e95;
+  --line: rgb(236 232 225 / 0.14);
+  --card: #262422;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+  --color-tan: var(--tan);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------- Base ---------- */
+html {
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-text-size-adjust: 100%;
+  transition: background-color 0.5s var(--ease-out), color 0.5s var(--ease-out);
+  /* Hide the page scrollbar (scrolling still works via wheel, touch, keys and Lenis). */
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: #1b1b1b;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ---------- Type ---------- */
+.display {
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.h-xl {
+  font-size: clamp(2.6rem, 5.4vw, 5.25rem);
+}
+.h-lg {
+  font-size: clamp(2.1rem, 4.2vw, 4rem);
+}
+.h-md {
+  font-size: clamp(1.75rem, 2.8vw, 2.75rem);
+}
+
+/* ---------- Rolling letters (CSS only, per-letter stagger) ---------- */
+.roll {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  line-height: 1.15;
+  vertical-align: bottom;
+}
+.roll__row {
+  display: inline-flex;
+  white-space: pre;
+}
+.roll__row--clone {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+}
+.roll__ch {
+  display: inline-block;
+  transition: transform 0.55s var(--ease-out);
+  transition-delay: calc(var(--i) * 18ms);
+}
+.roll__row--clone .roll__ch {
+  transform: translateY(0);
+}
+.roll-host:hover .roll__row:not(.roll__row--clone) .roll__ch,
+.roll-host:focus-visible .roll__row:not(.roll__row--clone) .roll__ch {
+  transform: translateY(-110%);
+}
+.roll-host:hover .roll__row--clone .roll__ch,
+.roll-host:focus-visible .roll__row--clone .roll__ch {
+  transform: translateY(-100%);
+}
+
+/* ---------- Marquee ---------- */
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.marquee-track {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ---------- Accordion (animates height with grid rows) ---------- */
+.accordion {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s var(--ease-out);
+}
+.accordion[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.accordion > * {
+  overflow: hidden;
+}
+
+/* Hide scrollbar for drag carousels */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- Reduced motion (OS setting or the in-page toggle) ---------- */
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0ms !important;
+}
+:root[data-motion="reduced"] .marquee-track {
+  animation: none;
 }
