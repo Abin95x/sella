@@ -1,8 +1,5 @@
 # sella — 3D furniture studio concept
 
-A concept site inspired by the layout and motion language of noho.ink, with an original brand, copy and
-procedurally-generated 3D chairs (no external models or photos).
-
 ## Stack
 Next.js 16 (App Router, TS) · Tailwind v4 · three.js + @react-three/fiber + drei · GSAP (ScrollTrigger, SplitText) · Lenis
 
