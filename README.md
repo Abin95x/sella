@@ -1,6 +1,9 @@
 ## Stack
 Next.js 16 (App Router, TS) · Tailwind v4 · three.js + @react-three/fiber + drei · GSAP (ScrollTrigger, SplitText) · Lenis
 
+## Live
+ [Sella](https://sella.rendersarc.com/)
+ 
 ## Run
 ```bash
 npm install
