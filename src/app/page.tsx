@@ -9,6 +9,7 @@ import { Stories } from "@/components/sections/Stories";
 import { Quiz } from "@/components/sections/Quiz";
 import { Faq } from "@/components/sections/Faq";
 import { DeferredScene } from "@/components/three/lazy";
+import { ScrollButton } from "@/components/ui/ScrollButton";
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
         <Faq />
       </main>
       <Footer />
+      <ScrollButton />
       <DeferredScene />
     </>
   );

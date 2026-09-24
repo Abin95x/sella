@@ -115,7 +115,7 @@ function ProductPanel({ product, index }: { product: Product; index: number }) {
         <div>
           <p className="text-2xl font-semibold tracking-tight">{product.name}</p>
           <p className="mt-0.5 text-sm">
-            From <span className="font-semibold">${product.price}</span> · <span>{swatch.name}</span>
+            From <span className="font-semibold">₹{product.price.toLocaleString("en-IN")}</span> · <span>{swatch.name}</span>
           </p>
           <div className="mt-3 flex gap-2" role="radiogroup" aria-label={`${product.name} colour`}>
             {product.swatches.map((s, i) => (

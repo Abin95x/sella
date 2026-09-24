@@ -16,7 +16,7 @@ export const products: Product[] = [
   {
     id: "arc",
     name: "Sella Arc",
-    price: 289,
+    price: 23999,
     tagline: "“Light enough to carry with one finger”",
     blurb:
       "Arc is the everyday chair that goes where the day goes — from the breakfast bench to the balcony to the extra seat at a crowded table.",
@@ -55,7 +55,7 @@ export const products: Product[] = [
   {
     id: "flow",
     name: "Sella Flow",
-    price: 420,
+    price: 34999,
     tagline: "“Built for people who fidget”",
     blurb:
       "Flow's perforated shell tilts and twists with you. It is the chair for long dinners, late deadlines and everything that happens in between.",
